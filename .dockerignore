@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+README.md
+.cursor
+terminals
+*.md
+docker-compose.override.yml
+

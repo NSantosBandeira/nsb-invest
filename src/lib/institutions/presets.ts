@@ -1,0 +1,30 @@
+/** Instituições mais usadas no Brasil (bancos, corretoras e fintechs). */
+export const PRESET_INSTITUTIONS = [
+  "Nubank",
+  "Banco Inter",
+  "XP Investimentos",
+  "BTG Pactual",
+  "Itaú",
+  "Bradesco",
+  "Banco do Brasil",
+  "Caixa Econômica Federal",
+  "C6 Bank",
+  "Santander",
+  "Rico",
+  "Clear Corretora",
+  "Genial Investimentos",
+  "Toro Investimentos",
+  "Modalmais",
+  "Mercado Pago",
+  "PicPay",
+  "Neon",
+  "PagBank",
+  "Avenue",
+  "Warren",
+  "Safra",
+  "Banco Original",
+  "Sicoob",
+  "Sicredi",
+] as const;
+
+export type PresetInstitutionName = (typeof PRESET_INSTITUTIONS)[number];

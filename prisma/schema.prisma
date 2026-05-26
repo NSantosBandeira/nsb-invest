@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String?
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  institutions   Institution[]
+  caixinhas      Caixinha[]
+  fiiPositions   FiiPosition[]
+  stockPositions StockPosition[]
+}
+
+model Institution {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  createdAt DateTime @default(now())
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  caixinhas      Caixinha[]
+  fiiPositions   FiiPosition[]
+  stockPositions StockPosition[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model Caixinha {
+  id            String   @id @default(cuid())
+  userId        String
+  institutionId String?
+  name          String
+  cdiPercent    Decimal? @db.Decimal(5, 2)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution Institution?       @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  movements   CaixinhaMovement[]
+
+  @@index([userId])
+}
+
+enum CaixinhaMovementType {
+  APORTE
+  RESGATE
+  RENDIMENTO
+  AJUSTE
+}
+
+model CaixinhaMovement {
+  id         String               @id @default(cuid())
+  caixinhaId String
+  userId     String
+  type       CaixinhaMovementType
+  amount     Decimal              @db.Decimal(14, 2)
+  date       DateTime
+  notes      String?
+  createdAt  DateTime             @default(now())
+
+  caixinha Caixinha @relation(fields: [caixinhaId], references: [id], onDelete: Cascade)
+
+  @@index([caixinhaId])
+  @@index([userId])
+}
+
+model FiiPosition {
+  id            String   @id @default(cuid())
+  userId        String
+  institutionId String?
+  ticker        String
+  quantity      Decimal  @default(0) @db.Decimal(14, 4)
+  averagePrice  Decimal  @default(0) @db.Decimal(14, 4)
+  currentPrice  Decimal  @default(0) @db.Decimal(14, 4)
+  dividendYield Decimal? @db.Decimal(8, 4)
+  lastQuoteAt   DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution Institution?  @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  movements   FiiMovement[]
+
+  @@unique([userId, ticker])
+  @@index([userId])
+}
+
+enum TradeMovementType {
+  COMPRA
+  VENDA
+  DIVIDENDO
+}
+
+model FiiMovement {
+  id         String            @id @default(cuid())
+  positionId String
+  userId     String
+  type       TradeMovementType
+  quantity   Decimal           @db.Decimal(14, 4)
+  unitPrice  Decimal           @db.Decimal(14, 4)
+  date       DateTime
+  notes      String?
+  createdAt  DateTime          @default(now())
+
+  position FiiPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@index([positionId])
+  @@index([userId])
+}
+
+model StockPosition {
+  id            String   @id @default(cuid())
+  userId        String
+  institutionId String?
+  ticker        String
+  quantity      Decimal  @default(0) @db.Decimal(14, 4)
+  averagePrice  Decimal  @default(0) @db.Decimal(14, 4)
+  currentPrice  Decimal  @default(0) @db.Decimal(14, 4)
+  dividendYield Decimal? @db.Decimal(8, 4)
+  lastQuoteAt   DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institution Institution?    @relation(fields: [institutionId], references: [id], onDelete: SetNull)
+  movements   StockMovement[]
+
+  @@unique([userId, ticker])
+  @@index([userId])
+}
+
+model StockMovement {
+  id         String            @id @default(cuid())
+  positionId String
+  userId     String
+  type       TradeMovementType
+  quantity   Decimal           @db.Decimal(14, 4)
+  unitPrice  Decimal           @db.Decimal(14, 4)
+  date       DateTime
+  notes      String?
+  createdAt  DateTime          @default(now())
+
+  position StockPosition @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@index([positionId])
+  @@index([userId])
+}
