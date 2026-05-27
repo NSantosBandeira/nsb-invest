@@ -15,6 +15,7 @@ type FiiMovementType = "COMPRA" | "VENDA" | "DIVIDENDO";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -73,7 +74,7 @@ export function NewFiiDialog({ institutions }: { institutions: Institution[] }) 
           <InstitutionSelect institutions={institutions} id="fii-inst" />
           <div className="space-y-2">
             <Label htmlFor="currentPrice">Preço atual (R$)</Label>
-            <Input id="currentPrice" name="currentPrice" placeholder="120,50" required />
+            <CurrencyInput id="currentPrice" name="currentPrice" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="notes">Observações</Label>
@@ -115,7 +116,7 @@ export function FiiMovementForm({ positionId }: { positionId: string }) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="unitPrice">Preço unitário (R$)</Label>
-          <Input id="unitPrice" name="unitPrice" placeholder="120,50" required />
+          <CurrencyInput id="unitPrice" name="unitPrice" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="date">Data</Label>
@@ -143,11 +144,12 @@ export function UpdateFiiPriceForm({
       <input type="hidden" name="positionId" value={positionId} />
       <div className="space-y-2">
         <Label htmlFor="update-price">Preço atual (R$)</Label>
-        <Input
+        <CurrencyInput
           id="update-price"
           name="currentPrice"
           defaultValue={currentPrice}
           className="w-40"
+          required
         />
       </div>
       <Button type="submit" size="sm" variant="outline" disabled={pending}>
@@ -255,10 +257,10 @@ export function EditFiiMovementDialog({
             </div>
             <div className="space-y-2">
               <Label htmlFor={`price-${movement.id}`}>Preço unitário (R$)</Label>
-              <Input
+              <CurrencyInput
                 id={`price-${movement.id}`}
                 name="unitPrice"
-                defaultValue={String(toNumber(movement.unitPrice))}
+                defaultValue={toNumber(movement.unitPrice)}
                 required
               />
             </div>

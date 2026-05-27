@@ -1,15 +1,18 @@
 "use client";
 
 import { useActionState } from "react";
+import { useRouter } from "next/navigation";
 import {
   createStockPosition,
   addStockMovement,
   updateStockPriceFromForm,
+  deleteStockMovement,
 } from "@/actions/acoes";
 import type { ActionState } from "@/actions/institutions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -21,7 +24,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
 type Institution = { id: string; name: string };
 
@@ -49,7 +52,7 @@ export function NewStockDialog({ institutions }: { institutions: Institution[] }
           <InstitutionSelect institutions={institutions} id="stock-inst" />
           <div className="space-y-2">
             <Label htmlFor="currentPrice">Preço atual (R$)</Label>
-            <Input id="currentPrice" name="currentPrice" placeholder="35,20" required />
+            <CurrencyInput id="currentPrice" name="currentPrice" required />
           </div>
           <div className="space-y-2">
             <Label htmlFor="notes">Observações</Label>
@@ -91,7 +94,7 @@ export function StockMovementForm({ positionId }: { positionId: string }) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="unitPrice">Preço unitário (R$)</Label>
-          <Input id="unitPrice" name="unitPrice" placeholder="35,20" required />
+          <CurrencyInput id="unitPrice" name="unitPrice" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="date">Data</Label>
@@ -119,11 +122,12 @@ export function UpdateStockPriceForm({
       <input type="hidden" name="positionId" value={positionId} />
       <div className="space-y-2">
         <Label htmlFor="update-price">Preço atual (R$)</Label>
-        <Input
+        <CurrencyInput
           id="update-price"
           name="currentPrice"
           defaultValue={currentPrice}
           className="w-40"
+          required
         />
       </div>
       <Button type="submit" size="sm" variant="outline" disabled={pending}>
@@ -131,5 +135,34 @@ export function UpdateStockPriceForm({
       </Button>
       {state.error && <p className="w-full text-sm text-destructive">{state.error}</p>}
     </form>
+  );
+}
+
+export function DeleteStockMovementButton({ movementId }: { movementId: string }) {
+  const router = useRouter();
+
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-xs"
+      className="text-muted-foreground hover:text-destructive"
+      title="Excluir movimentação"
+      onClick={async () => {
+        if (
+          !confirm(
+            "Excluir esta movimentação? A posição (quantidade e preço médio) será recalculada.",
+          )
+        ) {
+          return;
+        }
+        const result = await deleteStockMovement(movementId);
+        if (result.error) alert(result.error);
+        else router.refresh();
+      }}
+    >
+      <Trash2 className="h-3.5 w-3.5" />
+      <span className="sr-only">Excluir</span>
+    </Button>
   );
 }

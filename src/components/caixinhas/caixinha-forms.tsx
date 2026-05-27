@@ -12,6 +12,7 @@ import type { ActionState } from "@/actions/institutions";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { CurrencyInput } from "@/components/ui/currency-input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { NativeSelect } from "@/components/ui/native-select";
@@ -70,12 +71,7 @@ export function NewCaixinhaDialog({ institutions }: { institutions: Institution[
           </div>
           <div className="space-y-2">
             <Label htmlFor="initialBalance">Saldo atual (R$)</Label>
-            <Input
-              id="initialBalance"
-              name="initialBalance"
-              placeholder="5.000,00"
-              inputMode="decimal"
-            />
+            <CurrencyInput id="initialBalance" name="initialBalance" />
             <p className="text-xs text-muted-foreground">
               Opcional. Será registrado como aporte inicial.
             </p>
@@ -261,13 +257,7 @@ export function CaixinhaMovementForm({ caixinhaId }: { caixinhaId: string }) {
         </div>
         <div className="space-y-2">
           <Label htmlFor="amount">Valor (R$)</Label>
-          <Input
-            id="amount"
-            name="amount"
-            placeholder="1.000,00"
-            inputMode="decimal"
-            required
-          />
+          <CurrencyInput id="amount" name="amount" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="date">Data</Label>

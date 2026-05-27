@@ -12,6 +12,8 @@ import {
   parseInvestmentsWorkbook,
   type SpreadsheetPosition,
 } from "@/lib/import/investments-spreadsheet";
+import { parseBRLInput } from "@/lib/money";
+import { parseQuantityInput } from "@/lib/format";
 
 export type ImportResult = ActionState & {
   imported?: number;
@@ -150,11 +152,13 @@ function normalizeHeader(h: string): string {
 }
 
 function parseBrNumber(value: string): number {
-  const cleaned = value
-    .replace(/[^\d,.-]/g, "")
-    .replace(/\./g, "")
-    .replace(",", ".");
-  const n = parseFloat(cleaned);
+  const n = parseBRLInput(value);
+  if (!Number.isFinite(n)) throw new Error("número inválido");
+  return n;
+}
+
+function parseBrQuantity(value: string): number {
+  const n = parseQuantityInput(value);
   if (!Number.isFinite(n)) throw new Error("número inválido");
   return n;
 }
@@ -231,7 +235,7 @@ export async function importTradeCsv(
       const type = mapTradeType(cols[typeIdx] ?? "");
       if (!ticker || !type) throw new Error("ticker ou tipo inválido");
 
-      const quantity = parseBrNumber(cols[qtyIdx] ?? "0");
+      const quantity = parseBrQuantity(cols[qtyIdx] ?? "0");
       const unitPrice = parseBrNumber(cols[priceIdx] ?? "0");
       const date =
         dateIdx >= 0 && cols[dateIdx]
@@ -454,7 +458,7 @@ export async function importPositionsSnapshotCsv(
       const ticker = cols[tickerIdx]?.trim().toUpperCase();
       if (!ticker) throw new Error("ticker vazio");
 
-      const quantity = parseBrNumber(cols[qtyIdx] ?? "0");
+      const quantity = parseBrQuantity(cols[qtyIdx] ?? "0");
       const averagePrice =
         avgIdx >= 0 && cols[avgIdx] ? parseBrNumber(cols[avgIdx]) : 0;
       const currentPrice =

@@ -12,6 +12,8 @@ import {
   calculatePositionFromMovements,
 } from "@/lib/portfolio/position";
 import type { ActionState } from "@/actions/institutions";
+import { parseMoneyInput } from "@/lib/money";
+import { parseQuantityInput } from "@/lib/format";
 
 const positionSchema = z.object({
   ticker: z.string().min(4).max(12),
@@ -29,10 +31,9 @@ const tradeSchema = z.object({
   notes: z.string().optional(),
 });
 
-function parseNum(value: string): number {
-  const cleaned = value.replace(/[^\d,.-]/g, "").replace(/\./g, "").replace(",", ".");
-  const n = parseFloat(cleaned);
-  if (!Number.isFinite(n) || n <= 0) throw new Error("Valor inválido");
+function parseQuantity(value: string): number {
+  const n = parseQuantityInput(value);
+  if (!Number.isFinite(n) || n <= 0) throw new Error("Quantidade inválida");
   return n;
 }
 
@@ -72,7 +73,7 @@ export async function createStockPosition(
 
   let currentPrice: number;
   try {
-    currentPrice = parseNum(parsed.data.currentPrice);
+    currentPrice = parseMoneyInput(parsed.data.currentPrice);
   } catch {
     return { error: "Preço atual inválido" };
   }
@@ -116,7 +117,7 @@ export async function updateStockCurrentPrice(
 
   let price: number;
   try {
-    price = parseNum(currentPrice);
+    price = parseMoneyInput(currentPrice);
   } catch {
     return { error: "Preço inválido" };
   }
@@ -155,8 +156,8 @@ export async function addStockMovement(
   let quantity: number;
   let unitPrice: number;
   try {
-    quantity = parseNum(parsed.data.quantity);
-    unitPrice = parseNum(parsed.data.unitPrice);
+    quantity = parseQuantity(parsed.data.quantity);
+    unitPrice = parseMoneyInput(parsed.data.unitPrice);
   } catch {
     return { error: "Quantidade ou preço inválido" };
   }
@@ -182,6 +183,23 @@ export async function addStockMovement(
   }
 
   revalidatePath(`/acoes/${parsed.data.positionId}`);
+  revalidatePath("/acoes");
+  revalidatePath("/dashboard");
+  return { success: true };
+}
+
+export async function deleteStockMovement(movementId: string): Promise<ActionState> {
+  const userId = await requireUserId();
+  const movement = await db.stockMovement.findFirst({
+    where: { id: movementId, userId },
+  });
+  if (!movement) return { error: "Movimentação não encontrada" };
+
+  await db.stockMovement.delete({ where: { id: movementId } });
+
+  await syncStockPosition(movement.positionId, userId);
+
+  revalidatePath(`/acoes/${movement.positionId}`);
   revalidatePath("/acoes");
   revalidatePath("/dashboard");
   return { success: true };

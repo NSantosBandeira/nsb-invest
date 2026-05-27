@@ -10,6 +10,7 @@ import { getCdiAnnualRatePercent, getCdiDailyRatePercent } from "@/lib/market/cd
 import { calculateCaixinhaBalance } from "@/lib/portfolio/caixinha";
 import { calculateCaixinhaGains } from "@/lib/portfolio/gains";
 import type { ActionState } from "@/actions/institutions";
+import { parseMoneyInput } from "@/lib/money";
 
 const caixinhaSchema = z.object({
   name: z.string().min(1, "Nome obrigatório"),
@@ -27,16 +28,9 @@ const movementSchema = z.object({
   notes: z.string().optional(),
 });
 
-function parseAmount(value: string, allowZero = false): number {
-  const cleaned = value.replace(/[^\d,.-]/g, "").replace(/\./g, "").replace(",", ".");
-  const n = parseFloat(cleaned);
-  if (!Number.isFinite(n) || (!allowZero && n <= 0)) throw new Error("Valor inválido");
-  return n;
-}
-
 function parseOptionalAmount(value: string | undefined): number | null {
   if (!value?.trim()) return null;
-  return parseAmount(value, true);
+  return parseMoneyInput(value, true);
 }
 
 export async function createCaixinha(
@@ -190,7 +184,7 @@ export async function addCaixinhaMovement(
 
   let amount: number;
   try {
-    amount = parseAmount(parsed.data.amount);
+    amount = parseMoneyInput(parsed.data.amount);
   } catch {
     return { error: "Valor inválido" };
   }

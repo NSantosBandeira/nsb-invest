@@ -4,7 +4,11 @@ import { getStockPosition, deleteStockPosition } from "@/actions/acoes";
 import { formatBRL, formatDate, formatPercent } from "@/lib/format";
 import { SyncTickerQuoteButton } from "@/components/market/sync-ticker-quote-button";
 import { toNumber } from "@/lib/decimal";
-import { StockMovementForm, UpdateStockPriceForm } from "@/components/acoes/stock-forms";
+import {
+  StockMovementForm,
+  UpdateStockPriceForm,
+  DeleteStockMovementButton,
+} from "@/components/acoes/stock-forms";
 import { DeleteButton } from "@/components/delete-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -129,6 +133,7 @@ export default async function AcaoDetailPage({
                     <TableHead>Tipo</TableHead>
                     <TableHead>Qtd</TableHead>
                     <TableHead className="text-right">Preço</TableHead>
+                    <TableHead className="w-12 text-right" />
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -139,6 +144,9 @@ export default async function AcaoDetailPage({
                       <TableCell>{toNumber(m.quantity)}</TableCell>
                       <TableCell className="text-right">
                         {formatBRL(toNumber(m.unitPrice))}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DeleteStockMovementButton movementId={m.id} />
                       </TableCell>
                     </TableRow>
                   ))}
