@@ -127,4 +127,11 @@
   html {
     @apply font-sans;
   }
+
+  /* Opções do <select> nativo no dark mode (limitado por browser, mas melhora Chrome/Edge/Firefox) */
+  select option,
+  select optgroup {
+    background-color: var(--popover);
+    color: var(--popover-foreground);
+  }
 }
