@@ -41,6 +41,14 @@ export type GainsReport = {
   proventos: number;
   /** Soma das estimativas mensais (DY em FIIs + CDI em caixinhas) — não é dinheiro já recebido. */
   proventosEstimadosMensal: number;
+  /** Ganho/renda do mês: caixinhas (mês atual) + DY mensal em FIIs e ações. */
+  ganhoMensalEstimado: {
+    total: number;
+    caixinhas: number;
+    fiis: number;
+    acoes: number;
+    hasEstimate: boolean;
+  };
   ganhoTotal: number;
   ganhoTotalPercent: number;
   caixinhas: {
@@ -179,6 +187,32 @@ export async function getGainsReport(userId: string): Promise<GainsReport> {
     0,
   );
   const proventosEstimadosMensal = fiisRendaMensalDy + caixinhasRendaEstimadaMensal;
+
+  const caixinhasGanhoMensal = caixinhaPositions.reduce(
+    (s, p) => s + p.gains.monthlyGain,
+    0,
+  );
+  const acoesRendaMensalDy = stockGainsList.reduce((s, p) => {
+    const { marketValue } = p.gains;
+    const dy = p.dividendYield;
+    if (marketValue > 0 && dy != null && dy > 0) {
+      return s + (marketValue * (dy / 100)) / 12;
+    }
+    return s;
+  }, 0);
+  const ganhoMensalEstimado = {
+    total: caixinhasGanhoMensal + fiisRendaMensalDy + acoesRendaMensalDy,
+    caixinhas: caixinhasGanhoMensal,
+    fiis: fiisRendaMensalDy,
+    acoes: acoesRendaMensalDy,
+    hasEstimate:
+      caixinhaPositions.some(
+        (p) => p.gains.monthlyGainIsEstimated && p.gains.monthlyGain !== 0,
+      ) ||
+      fiisRendaMensalDy > 0 ||
+      acoesRendaMensalDy > 0,
+  };
+
   const ganhoTotal = ganhoCapital;
   const ganhoTotalPercent =
     totalInvestido > 0 ? (ganhoTotal / totalInvestido) * 100 : 0;
@@ -191,6 +225,7 @@ export async function getGainsReport(userId: string): Promise<GainsReport> {
     ganhoCapital,
     proventos,
     proventosEstimadosMensal,
+    ganhoMensalEstimado,
     ganhoTotal,
     ganhoTotalPercent,
     caixinhas: {

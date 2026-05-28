@@ -52,19 +52,70 @@ export default async function DashboardPage() {
           <p className="stat-value-lg">{formatBRL(summary.total)}</p>
           <div className="mt-3 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <span className="text-muted-foreground">
+              Ganho no mês (est.):{" "}
+              <span className="inline-flex items-center gap-1 font-medium text-emerald-600 dark:text-emerald-400">
+                {gains.ganhoMensalEstimado.total > 0 ? (
+                  <>
+                    ~{formatBRL(gains.ganhoMensalEstimado.total)}
+                    {gains.ganhoMensalEstimado.hasEstimate && (
+                      <span
+                        className="text-[0.65rem] font-normal text-muted-foreground"
+                        title="Inclui estimativas por CDI e dividend yield"
+                      >
+                        est.
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  "—"
+                )}
+              </span>
+            </span>
+            <span className="text-muted-foreground">
               Ganho capital: <GainValue value={gains.ganhoCapital} />
             </span>
             <span className="text-muted-foreground">
-              Proventos: {formatBRL(gains.proventos)}
+              Proventos recebidos: {formatBRL(gains.proventos)}
             </span>
             <Link href="/ganhos" className="text-primary hover:underline">
               Ver evolução e detalhes →
             </Link>
           </div>
+          {gains.ganhoMensalEstimado.total > 0 && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              No mês: caixinhas {formatBRL(gains.ganhoMensalEstimado.caixinhas)}
+              {gains.ganhoMensalEstimado.fiis > 0 && (
+                <> · FIIs ~{formatBRL(gains.ganhoMensalEstimado.fiis)}</>
+              )}
+              {gains.ganhoMensalEstimado.acoes > 0 && (
+                <> · Ações ~{formatBRL(gains.ganhoMensalEstimado.acoes)}</>
+              )}
+            </p>
+          )}
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Ganho estimado no mês
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="stat-value text-emerald-600 dark:text-emerald-400">
+              {gains.ganhoMensalEstimado.total > 0
+                ? `~${formatBRL(gains.ganhoMensalEstimado.total)}`
+                : "—"}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Caixinhas no mês + renda mensal estimada (DY) em FIIs e ações
+            </p>
+            <Link href="/ganhos" className="mt-2 inline-block text-sm text-primary hover:underline">
+              Detalhar ganhos
+            </Link>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Caixinhas</CardTitle>
