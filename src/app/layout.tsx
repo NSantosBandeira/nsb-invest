@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeScript } from "@/components/theme-script";
@@ -19,6 +19,11 @@ export const metadata: Metadata = {
   description: "Gerencie caixinhas, FIIs e ações em um só lugar",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -35,7 +40,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         {children}
-        <Toaster richColors position="top-right" />
+        <Toaster richColors position="top-center" className="sm:!top-4 sm:!right-4 sm:!left-auto" />
       </body>
     </html>
   );

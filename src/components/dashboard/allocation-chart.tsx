@@ -1,6 +1,7 @@
 "use client";
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { formatBRL, formatPercent } from "@/lib/format";
 
 function slicePercentLabel(percent: number | undefined): string {
@@ -20,6 +21,7 @@ const COLORS = [
 ];
 
 export function AllocationChart({ data }: AllocationChartProps) {
+  const isCompact = useMediaQuery("(max-width: 640px)");
   const filtered = data.filter((d) => d.value > 0);
 
   if (filtered.length === 0) {
@@ -31,7 +33,7 @@ export function AllocationChart({ data }: AllocationChartProps) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={280}>
+    <ResponsiveContainer width="100%" height={isCompact ? 240 : 280}>
       <PieChart>
         <Pie
           data={filtered}
@@ -39,8 +41,8 @@ export function AllocationChart({ data }: AllocationChartProps) {
           nameKey="name"
           cx="50%"
           cy="50%"
-          outerRadius={90}
-          label={({ name, percent }) => `${name} ${slicePercentLabel(percent)}`}
+          outerRadius={isCompact ? 64 : 90}
+          label={isCompact ? false : ({ name, percent }) => `${name} ${slicePercentLabel(percent)}`}
         >
           {filtered.map((_, index) => (
             <Cell key={index} fill={COLORS[index % COLORS.length]} />

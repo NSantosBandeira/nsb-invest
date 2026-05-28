@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { loginUser, type AuthActionState } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,8 @@ const initialState: AuthActionState = {};
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(loginUser, initialState);
+  const searchParams = useSearchParams();
+  const sessionExpired = searchParams.get("reason") === "session-expired";
 
   return (
     <Card className="w-full max-w-md">
@@ -28,6 +31,11 @@ export function LoginForm() {
       </CardHeader>
       <form action={action}>
         <CardContent className="space-y-4">
+          {sessionExpired && (
+            <p className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+              Sua sessão expirou por segurança. Faça login novamente para continuar.
+            </p>
+          )}
           {state.error && (
             <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
               {state.error}

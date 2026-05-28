@@ -26,10 +26,10 @@ export default async function AcoesPage() {
   const total = positions.reduce((sum, p) => sum + p.marketValue, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Ações</h1>
+          <h1 className="page-title">Ações</h1>
           <p className="text-muted-foreground">Total: {formatBRL(total)}</p>
         </div>
         <div className="flex flex-wrap gap-2">

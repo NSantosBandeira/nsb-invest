@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { formatBRL } from "@/lib/format";
 import type { EvolutionPoint } from "@/lib/portfolio/evolution";
 
@@ -18,6 +19,8 @@ type EvolutionChartProps = {
 };
 
 export function EvolutionChart({ data }: EvolutionChartProps) {
+  const isCompact = useMediaQuery("(max-width: 640px)");
+
   if (data.length === 0) {
     return (
       <p className="flex h-64 items-center justify-center text-sm text-muted-foreground">
@@ -27,12 +30,13 @@ export function EvolutionChart({ data }: EvolutionChartProps) {
   }
 
   return (
-    <ResponsiveContainer width="100%" height={320}>
-      <AreaChart data={data}>
+    <ResponsiveContainer width="100%" height={isCompact ? 260 : 320}>
+      <AreaChart data={data} margin={isCompact ? { left: 0, right: 8, top: 8, bottom: 0 } : undefined}>
         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-        <XAxis dataKey="label" tick={{ fontSize: 12 }} />
+        <XAxis dataKey="label" tick={{ fontSize: isCompact ? 10 : 12 }} interval="preserveStartEnd" />
         <YAxis
-          tick={{ fontSize: 12 }}
+          width={isCompact ? 48 : 60}
+          tick={{ fontSize: isCompact ? 10 : 12 }}
           tickFormatter={(v) =>
             new Intl.NumberFormat("pt-BR", {
               notation: "compact",

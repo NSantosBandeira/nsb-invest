@@ -39,7 +39,7 @@ export default async function FiiDetailPage({
   if (!position) notFound();
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link
@@ -49,7 +49,7 @@ export default async function FiiDetailPage({
             <ArrowLeft className="h-4 w-4" />
             Voltar
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight">{position.ticker}</h1>
+          <h1 className="page-title">{position.ticker}</h1>
           <p className="text-muted-foreground">
             {position.institution?.name ?? "Sem instituição"}
           </p>
@@ -63,7 +63,7 @@ export default async function FiiDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Valor de mercado</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatBRL(position.marketValue)}</p>
+            <p className="stat-value">{formatBRL(position.marketValue)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -71,7 +71,7 @@ export default async function FiiDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Preço atual</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatBRL(toNumber(position.currentPrice))}</p>
+            <p className="stat-value">{formatBRL(toNumber(position.currentPrice))}</p>
             {position.lastQuoteAt && (
               <p className="mt-1 text-xs text-muted-foreground">
                 Atualizado em {formatDate(position.lastQuoteAt)}
@@ -84,7 +84,7 @@ export default async function FiiDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Dividend yield (12m)</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
+            <p className="stat-value">
               {position.dividendYield != null
                 ? formatPercent(position.dividendYield)
                 : "—"}
@@ -99,7 +99,7 @@ export default async function FiiDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Quantidade / PM</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{toNumber(position.quantity)}</p>
+            <p className="stat-value">{toNumber(position.quantity)}</p>
             <p className="text-sm text-muted-foreground">
               PM {formatBRL(toNumber(position.averagePrice))}
             </p>
@@ -118,7 +118,7 @@ export default async function FiiDetailPage({
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Pelo DY (12 meses)</p>
-              <p className="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <p className="stat-value mt-1 text-emerald-600 dark:text-emerald-400">
                 {position.income.estimatedMonthlyFromDy != null
                   ? formatBRL(position.income.estimatedMonthlyFromDy)
                   : "—"}
@@ -131,7 +131,7 @@ export default async function FiiDetailPage({
             </div>
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Média pelo histórico (12m)</p>
-              <p className="mt-1 text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+              <p className="stat-value mt-1 text-emerald-600 dark:text-emerald-400">
                 {position.income.averageMonthlyFromHistory != null
                   ? formatBRL(position.income.averageMonthlyFromHistory)
                   : "—"}
@@ -144,7 +144,7 @@ export default async function FiiDetailPage({
             </div>
             <div className="rounded-lg border p-4">
               <p className="text-sm text-muted-foreground">Último dividendo lançado</p>
-              <p className="mt-1 text-2xl font-bold">
+              <p className="stat-value mt-1">
                 {position.income.lastDividendAmount != null
                   ? formatBRL(position.income.lastDividendAmount)
                   : "—"}
@@ -160,7 +160,7 @@ export default async function FiiDetailPage({
       </Card>
 
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <CardHeader className="card-header-actions space-y-0">
           <CardTitle>Cotação e DY pela internet</CardTitle>
           <SyncTickerQuoteButton ticker={position.ticker} assetType="fii" />
         </CardHeader>

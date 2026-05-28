@@ -36,10 +36,10 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">Visão consolidada do seu patrimônio</p>
+        <h1 className="page-title">Dashboard</h1>
+        <p className="page-description">Visão consolidada do seu patrimônio</p>
       </div>
 
       <Card>
@@ -49,8 +49,8 @@ export default async function DashboardPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-4xl font-bold">{formatBRL(summary.total)}</p>
-          <div className="mt-3 flex flex-wrap items-center gap-4 text-sm">
+          <p className="stat-value-lg">{formatBRL(summary.total)}</p>
+          <div className="mt-3 flex flex-col gap-2 text-sm sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <span className="text-muted-foreground">
               Ganho capital: <GainValue value={gains.ganhoCapital} />
             </span>
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-sm font-medium">Caixinhas</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">{formatBRL(summary.caixinhas)}</p>
+            <p className="stat-value">{formatBRL(summary.caixinhas)}</p>
             <Link href="/caixinhas" className="mt-2 text-sm text-primary hover:underline">
               Ver detalhes
             </Link>
@@ -81,7 +81,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-sm font-medium">FIIs</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">{formatBRL(summary.fiis)}</p>
+            <p className="stat-value">{formatBRL(summary.fiis)}</p>
             <Link href="/fiis" className="mt-2 text-sm text-primary hover:underline">
               Ver detalhes
             </Link>
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
             <CardTitle className="text-sm font-medium">Ações</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-semibold">{formatBRL(summary.acoes)}</p>
+            <p className="stat-value">{formatBRL(summary.acoes)}</p>
             <Link href="/acoes" className="mt-2 text-sm text-primary hover:underline">
               Ver detalhes
             </Link>

@@ -114,11 +114,11 @@ export default async function GanhosPage() {
   const report = await getGainsReport(user.id);
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Ganhos e evolução</h1>
-          <p className="text-muted-foreground">
+          <h1 className="page-title">Ganhos e evolução</h1>
+          <p className="page-description">
             Acompanhe rentabilidade, proventos e patrimônio ao longo do tempo
           </p>
         </div>
@@ -134,7 +134,7 @@ export default async function GanhosPage() {
             <CardTitle className="text-sm text-muted-foreground">Patrimônio</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatBRL(report.patrimonio)}</p>
+            <p className="stat-value">{formatBRL(report.patrimonio)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -142,7 +142,7 @@ export default async function GanhosPage() {
             <CardTitle className="text-sm text-muted-foreground">Total investido</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatBRL(report.totalInvestido)}</p>
+            <p className="stat-value">{formatBRL(report.totalInvestido)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -150,7 +150,7 @@ export default async function GanhosPage() {
             <CardTitle className="text-sm text-muted-foreground">Ganho (capital)</CardTitle>
           </CardHeader>
           <CardContent>
-            <GainValue value={report.ganhoCapital} className="text-2xl font-bold" />
+            <GainValue value={report.ganhoCapital} className="stat-value" />
           </CardContent>
         </Card>
         <Card>
@@ -160,7 +160,7 @@ export default async function GanhosPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+            <p className="stat-value text-emerald-600 dark:text-emerald-400">
               {formatBRL(report.proventos)}
             </p>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -188,7 +188,7 @@ export default async function GanhosPage() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <CardTitle>Fundos imobiliários</CardTitle>
               <Badge variant="secondary">{formatBRL(report.fiis.total)}</Badge>
             </div>
@@ -220,7 +220,7 @@ export default async function GanhosPage() {
 
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <CardTitle>Ações</CardTitle>
               <Badge variant="secondary">{formatBRL(report.acoes.total)}</Badge>
             </div>
@@ -239,7 +239,7 @@ export default async function GanhosPage() {
 
         <Card>
           <CardHeader>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <CardTitle>Caixinhas</CardTitle>
               <Badge variant="secondary">{formatBRL(report.caixinhas.total)}</Badge>
             </div>

@@ -31,10 +31,10 @@ export default async function CaixinhasPage() {
   const totalMonthly = caixinhas.reduce((sum, c) => sum + c.gains.monthlyGain, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Caixinhas</h1>
+          <h1 className="page-title">Caixinhas</h1>
           <p className="text-muted-foreground">
             Total: {formatBRL(total)}
             <span className="mx-2">·</span>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Menu } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -24,16 +25,17 @@ const navItems = [
 
 export function MobileNav() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         className={cn(buttonVariants({ variant: "outline", size: "icon" }), "md:hidden")}
       >
         <Menu className="h-4 w-4" />
         <span className="sr-only">Menu</span>
       </SheetTrigger>
-      <SheetContent side="left">
+      <SheetContent side="left" className="w-[min(100vw-2rem,18rem)]">
         <SheetHeader>
           <SheetTitle>NSB Invest</SheetTitle>
         </SheetHeader>
@@ -45,8 +47,9 @@ export function MobileNav() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => setOpen(false)}
                 className={cn(
-                  "rounded-lg px-3 py-2 text-sm font-medium",
+                  "rounded-lg px-3 py-2.5 text-sm font-medium",
                   active ? "bg-primary text-primary-foreground" : "hover:bg-muted",
                 )}
               >

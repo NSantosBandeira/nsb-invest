@@ -9,13 +9,13 @@ type HeaderProps = {
 
 export function Header({ userName }: HeaderProps) {
   return (
-    <header className="flex h-16 items-center justify-between border-b bg-card px-4 md:px-6">
-      <div className="flex items-center gap-3">
+    <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b bg-card px-3 sm:h-16 sm:px-4 md:px-6">
+      <div className="flex min-w-0 items-center gap-2 sm:gap-3">
         <MobileNav />
-        <span className="text-sm text-muted-foreground md:hidden">NSB Invest</span>
+        <span className="truncate text-sm font-medium md:hidden">NSB Invest</span>
       </div>
-      <div className="flex items-center gap-2">
-        <span className="hidden text-sm text-muted-foreground sm:inline">
+      <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <span className="hidden max-w-[140px] truncate text-sm text-muted-foreground md:inline lg:max-w-none">
           Olá, {userName}
         </span>
         <ThemeToggle />
@@ -25,7 +25,7 @@ export function Header({ userName }: HeaderProps) {
             await signOut({ redirectTo: "/login" });
           }}
         >
-          <Button type="submit" variant="outline" size="sm">
+          <Button type="submit" variant="outline" size="sm" className="px-2.5 sm:px-3">
             Sair
           </Button>
         </form>

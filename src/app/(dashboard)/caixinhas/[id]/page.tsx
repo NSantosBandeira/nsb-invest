@@ -45,7 +45,7 @@ export default async function CaixinhaDetailPage({
   if (!caixinha) notFound();
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <Link
@@ -55,7 +55,7 @@ export default async function CaixinhaDetailPage({
             <ArrowLeft className="h-4 w-4" />
             Voltar
           </Link>
-          <h1 className="text-2xl font-bold tracking-tight">{caixinha.name}</h1>
+          <h1 className="page-title">{caixinha.name}</h1>
           <p className="text-muted-foreground">
             {caixinha.institution?.name ?? "Sem instituição"}
             {caixinha.cdiPercent ? ` · ${toNumber(caixinha.cdiPercent)}% do CDI` : ""}
@@ -82,7 +82,7 @@ export default async function CaixinhaDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Saldo atual</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">{formatBRL(caixinha.balance)}</p>
+            <p className="stat-value">{formatBRL(caixinha.balance)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -90,7 +90,7 @@ export default async function CaixinhaDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Ganho hoje</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="stat-value">
               <CaixinhaGainValue
                 value={caixinha.gains.dailyGain}
                 isEstimated={caixinha.gains.dailyGainIsEstimated}
@@ -129,7 +129,7 @@ export default async function CaixinhaDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Ganho no mês</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="stat-value">
               <CaixinhaGainValue
                 value={caixinha.gains.monthlyGain}
                 isEstimated={caixinha.gains.monthlyGainIsEstimated}
@@ -147,7 +147,7 @@ export default async function CaixinhaDetailPage({
             <CardTitle className="text-sm text-muted-foreground">Ganho total</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="stat-value">
               <CaixinhaGainValue
                 value={caixinha.gains.gain}
                 isEstimated={caixinha.gains.gainIsEstimated}

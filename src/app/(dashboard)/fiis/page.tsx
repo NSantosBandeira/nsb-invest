@@ -32,10 +32,10 @@ export default async function FiisPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="page-shell">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Fundos imobiliários</h1>
+          <h1 className="page-title">Fundos imobiliários</h1>
           <p className="text-muted-foreground">
             Total: {formatBRL(total)}
             {totalMonthlyDy > 0 && (

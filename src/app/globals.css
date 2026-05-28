@@ -135,3 +135,33 @@
     color: var(--popover-foreground);
   }
 }
+
+@layer components {
+  .page-shell {
+    @apply space-y-6;
+  }
+
+  .page-title {
+    @apply text-xl font-bold tracking-tight sm:text-2xl;
+  }
+
+  .page-description {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .stat-value {
+    @apply text-xl font-bold sm:text-2xl;
+  }
+
+  .stat-value-lg {
+    @apply text-2xl font-bold sm:text-3xl md:text-4xl;
+  }
+
+  .card-header-actions {
+    @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .page-main > * {
+    @apply min-w-0;
+  }
+}
